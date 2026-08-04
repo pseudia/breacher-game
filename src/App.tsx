@@ -94,10 +94,11 @@ export default function App() {
   const closeHelp = () => o.closeHelp && o.closeHelp();
 
   return (<><div style={_style(`position:relative;min-height:100vh;width:100%;background:radial-gradient(1200px 700px at 70% -10%, #251747 0%, #0D0C16 55%);color:var(--neutral-100);font-family:var(--font-body);overflow:hidden;display:flex;flex-direction:column`)}>
+    <div style={_style(`position:absolute;inset:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zM40 40.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zM0 40.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z' fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");z-index:0`)}></div>
 
   <header style={_style(`display:flex;align-items:center;gap:16px;padding:14px 22px;border-bottom:1px solid rgba(255,255,255,.07);flex-wrap:wrap`)}>
-    <div style={_style(`display:flex;align-items:center;gap:11px`)}>
-      <div style={_style(`width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#822FFF,#CCAEFC);box-shadow:0 0 22px rgba(130,47,255,.6)`)}></div>
+    <div style={_style(`display:flex;align-items:center;gap:11px;position:relative;z-index:1`)}>
+      <img src="/breached_logo.svg" width="30" height="30" style={_style(`border-radius:8px;box-shadow:0 0 22px rgba(130,47,255,.6)`)} alt="Breached Logo" />
       <div>
         <div style={_style(`font-family:var(--font-display);font-weight:700;font-size:20px;letter-spacing:.14em;text-shadow:0 0 20px rgba(130,47,255,.55)`)}>BREACHED</div>
         <div style={_style(`font-size:11px;color:var(--neutral-400);letter-spacing:.05em;margin-top:1px`)}>defend your data · a governance pandemic sim</div>
@@ -242,6 +243,7 @@ export default function App() {
     <div style={_style(`max-width:940px;width:100%;margin:auto`)}>
       <div style={_style(`text-align:center;margin-bottom:22px`)}>
         <div style={_style(`display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border-radius:999px;background:rgba(130,47,255,.16);border:1px solid rgba(164,102,255,.4);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#CCAEFC;margin-bottom:16px`)}>★ EU-made data pandemic sim</div>
+        <img src="/breached_logo.svg" width="80" height="80" style={_style(`display:block;margin:0 auto 20px auto;border-radius:18px;box-shadow:0 0 40px rgba(130,47,255,.6)`)} alt="Breached Logo" />
         <h1 style={_style(`font-family:var(--font-display);font-size:clamp(30px,5.5vw,52px);line-height:1.05;margin:0 0 12px;letter-spacing:-.02em`)}>The breach is coming.<br />What did you protect?</h1>
         <p style={_style(`max-width:640px;margin:0 auto;color:var(--neutral-300);font-size:16px;line-height:1.55`)}>You run an EU organisation. A breach <b style={_style(`color:#fff`)}>will</b> get in — and once copies leave your systems they spread worldwide on their own. Your only real choice is what those copies <i>contain</i>. <b style={_style(`color:#CCAEFC`)}>Click any of your systems on the map</b> to choose its defence — or cut it off entirely — and keep the business running.<br />First: what kind of company are you?</p>
       </div>
@@ -256,16 +258,16 @@ export default function App() {
       <div style={_style(`display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px`)}>
         <button onClick={pickClinic } style={_style(`text-align:left;padding:18px;border-radius:14px;border:1px solid rgba(164,102,255,.4);background:rgba(255,255,255,.03);color:#fff;cursor:pointer;font-family:inherit;transition:transform .12s ease`)}>
           <div style={_style(`font-size:28px;margin-bottom:8px`)}><GameIcon icon="🏥" /></div><b style={_style(`font-size:16px`)}>Riverside Clinic</b><div style={_style(`font-size:12px;color:#CCAEFC;margin:3px 0 8px`)}>Small · healthcare</div>
-          <div style={_style(`font-size:12px;color:var(--neutral-400);line-height:1.55`)}>Base budget <b style={_style(`color:#5FD3A6`)}>€25k</b> · income low<br />IT team: 2 deploys/day<br />Data: <b style={_style(`color:#F0857A`)}>highly sensitive</b> patient records<br />Small estate — but one leak is fatal to trust.</div></button>
+          <div style={_style(`font-size:12px;color:var(--neutral-400);line-height:1.55`)}>Base budget <b style={_style(`color:#5FD3A6`)}>€120k</b> · income low<br />IT team: 2 concurrent deploys<br />Data: <b style={_style(`color:#F0857A`)}>highly sensitive</b> patient records<br />Small estate — but one leak is fatal to trust.</div></button>
         <button onClick={pickInsurer } style={_style(`text-align:left;padding:18px;border-radius:14px;border:1px solid rgba(164,102,255,.4);background:rgba(255,255,255,.03);color:#fff;cursor:pointer;font-family:inherit;transition:transform .12s ease`)}>
           <div style={_style(`font-size:28px;margin-bottom:8px`)}><GameIcon icon="🏢" /></div><b style={_style(`font-size:16px`)}>Meridian Mutual</b><div style={_style(`font-size:12px;color:#CCAEFC;margin:3px 0 8px`)}>Mid-size · insurance</div>
-          <div style={_style(`font-size:12px;color:var(--neutral-400);line-height:1.55`)}>Base budget <b style={_style(`color:#5FD3A6`)}>€50k</b> · income solid<br />Outsourced IT: <b style={_style(`color:#E7B15C`)}>2 deploys/day</b><br />Data: financial + health claims<br />Cash-rich, capability-poor.</div></button>
+          <div style={_style(`font-size:12px;color:var(--neutral-400);line-height:1.55`)}>Base budget <b style={_style(`color:#5FD3A6`)}>€200k</b> · income solid<br />Outsourced IT: <b style={_style(`color:#E7B15C`)}>2 concurrent deploys</b><br />Data: financial + health claims<br />Cash-rich, capability-poor.</div></button>
         <button onClick={pickBank } style={_style(`text-align:left;padding:18px;border-radius:14px;border:1px solid rgba(164,102,255,.4);background:rgba(255,255,255,.03);color:#fff;cursor:pointer;font-family:inherit;transition:transform .12s ease`)}>
           <div style={_style(`font-size:28px;margin-bottom:8px`)}><GameIcon icon="🏦" /></div><b style={_style(`font-size:16px`)}>Nova Capital</b><div style={_style(`font-size:12px;color:#CCAEFC;margin:3px 0 8px`)}>Mid-large · financial services</div>
-          <div style={_style(`font-size:12px;color:var(--neutral-400);line-height:1.55`)}>Base budget <b style={_style(`color:#5FD3A6`)}>€80k</b> · income high<br />IT team: 3 deploys/day<br />Data: accounts, transactions, credit files<br /><b style={_style(`color:#E7B15C`)}>Regulators watch every move.</b></div></button>
+          <div style={_style(`font-size:12px;color:var(--neutral-400);line-height:1.55`)}>Base budget <b style={_style(`color:#5FD3A6`)}>€300k</b> · income high<br />IT team: 3 concurrent deploys<br />Data: accounts, transactions, credit files<br /><b style={_style(`color:#E7B15C`)}>Regulators watch every move.</b></div></button>
         <button onClick={pickEnterprise } style={_style(`text-align:left;padding:18px;border-radius:14px;border:1px solid rgba(164,102,255,.4);background:rgba(255,255,255,.03);color:#fff;cursor:pointer;font-family:inherit;transition:transform .12s ease`)}>
           <div style={_style(`font-size:28px;margin-bottom:8px`)}><GameIcon icon="🌐" /></div><b style={_style(`font-size:16px`)}>Atlas Group</b><div style={_style(`font-size:12px;color:#CCAEFC;margin:3px 0 8px`)}>Large · multinational</div>
-          <div style={_style(`font-size:12px;color:var(--neutral-400);line-height:1.55`)}>Base budget <b style={_style(`color:#5FD3A6`)}>€120k</b> · income high<br />Big IT: 3 deploys/day<br />Sprawling estate — <b style={_style(`color:#F0857A`)}>breach spreads faster</b><br />Regulators watch you closely.</div></button>
+          <div style={_style(`font-size:12px;color:var(--neutral-400);line-height:1.55`)}>Base budget <b style={_style(`color:#5FD3A6`)}>€400k</b> · income high<br />Big IT: 3 concurrent deploys<br />Sprawling estate — <b style={_style(`color:#F0857A`)}>breach spreads faster</b><br />Regulators watch you closely.</div></button>
       </div>
       <div style={_style(`display:flex;gap:10px;margin-top:12px;flex-wrap:wrap`)}>
         <button onClick={toggleCustom } style={_style(`flex:2 1 260px;text-align:center;padding:13px;border-radius:14px;border:1px dashed rgba(164,102,255,.5);background:rgba(130,47,255,.07);color:#CCAEFC;cursor:pointer;font-family:inherit;font-size:14px;font-weight:500`)}>🛠 Or design your own company →</button>
@@ -292,7 +294,7 @@ export default function App() {
             <div style={_style(`display:flex;gap:6px;flex-wrap:wrap`)}>{(sizeOpts || []).map((o: any, i: number) => (<React.Fragment key={i}><button onClick={o.onClick } style={_style(o.style )}>{o.label}</button></React.Fragment>))}</div>
             <div style={_style(`display:flex;gap:18px;margin-top:12px;flex-wrap:wrap`)}>
               <label style={_style(`font-size:12px;color:var(--neutral-300)`)}>Budget <b style={_style(`color:#5FD3A6;font-family:var(--font-mono)`)}>€{cBudget}k</b><br /><input type="range" min="40" max="250" step="5" value={cBudget } onChange={setCBudget } style={_style(`width:150px;accent-color:#822FFF`)} /></label>
-              <label style={_style(`font-size:12px;color:var(--neutral-300)`)}>IT capacity <b style={_style(`color:#CCAEFC;font-family:var(--font-mono)`)}>{cDeploys}/day</b><br /><input type="range" min="1" max="4" step="1" value={cDeploys } onChange={setCDeploys } style={_style(`width:150px;accent-color:#822FFF`)} /></label>
+              <label style={_style(`font-size:12px;color:var(--neutral-300)`)}>IT capacity <b style={_style(`color:#CCAEFC;font-family:var(--font-mono)`)}>{cDeploys} concurrent</b><br /><input type="range" min="1" max="4" step="1" value={cDeploys } onChange={setCDeploys } style={_style(`width:150px;accent-color:#822FFF`)} /></label>
             </div>
           </div>
         </div>

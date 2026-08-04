@@ -13,20 +13,22 @@ export class GameEngine {
   state = { screen:'start', custom:false, cName:'Acme Corp', cIcon:'🚀', cSector:'enterprise', cBudget:120, cDeploys:2, cSens:'med', cSize:'mid', difficulty:'normal' };
 
   PROFILES = {
-    clinic:     { icon:'🏥', name:'Riverside Clinic', budget:25,  income:1.8, deploys:2, recMult:1.3, spread:0.85, scr:0.9 },
-    insurer:    { icon:'🏢', name:'Meridian Mutual',  budget:50,  income:3.0, deploys:2, recMult:1.0, spread:1.0,  scr:1.0 },
-    bank:       { icon:'🏦', name:'Nova Capital',     budget:80,  income:4.0, deploys:3, recMult:1.15, spread:1.05, scr:1.2 },
-    enterprise: { icon:'🌐', name:'Atlas Group',      budget:120, income:5.0, deploys:3, recMult:1.0, spread:1.25, scr:1.25 },
+    clinic:     { icon:'🏥', name:'Riverside Clinic', budget:120,  income:1.8, deploys:2, recMult:1.3, spread:0.85, scr:0.9 },
+    insurer:    { icon:'🏢', name:'Meridian Mutual',  budget:200,  income:3.0, deploys:2, recMult:1.0, spread:1.0,  scr:1.0 },
+    bank:       { icon:'🏦', name:'Nova Capital',     budget:300,  income:4.0, deploys:3, recMult:1.15, spread:1.05, scr:1.2 },
+    enterprise: { icon:'🌐', name:'Atlas Group',      budget:400, income:5.0, deploys:3, recMult:1.0, spread:1.25, scr:1.25 },
   };
   TOOLS = {
-    pseudo:{icon:'🛡️',name:'Pseudonymise',base:10,per:0.015,util:0.95,ring:'#A466FF',desc:'Replace identifiers with realistic tokens at the source. Cheap to run, no keys to manage — copies become worthless to attackers and the data keeps working (~95% utility).'},
-    enc:{icon:'🔐',name:'Encrypt at rest',base:15,per:0.025,util:0.35,ring:'#2E6FD5',desc:'Key management, HSMs and rotation make this pricey. Copies leak as unreadable blobs — until a key slips. Dead weight in daily workflows (~35% utility).'},
-    lock:{icon:'🔒',name:'Access lockdown',base:12,per:0.018,util:0.65,ring:'#E7B15C',desc:'Least privilege slows break-ins to this system, but whatever leaks is still real (~65% utility).'},
-    anon:{icon:'✂️',name:'Anonymise',base:20,per:0.035,util:0.15,ring:'#8A86A3',desc:'Real anonymisation is expensive: k-anonymity analysis, re-identification audits, per-dataset tuning. Nothing can leak — and nothing useful remains (~15% utility).'},
+    pseudo:{icon:'🛡️',name:'Pseudonymisation',time:1,base:10,per:0.015,util:0.95,ring:'#A466FF',desc:'Replace identifiers with realistic tokens. Takes 1 day to deploy. Cheap to run, data keeps working.'},
+    synth:{icon:'🧬',name:'Synthetic data',time:3,base:25,per:0.04,util:0.90,ring:'#5FD3A6',desc:'Generate artificial data. Takes 3 days to deploy. Very expensive. Usability is high.'},
+    enc:{icon:'🔐',name:'Encrypt at rest',time:2,base:15,per:0.025,util:0.35,ring:'#2E6FD5',desc:'Key management makes this pricey. Takes 2 days to deploy. Dead weight in workflows.'},
+    lock:{icon:'🔒',name:'Access lockdown',time:1,base:12,per:0.018,util:0.65,ring:'#E7B15C',desc:'Least privilege slows break-ins. Takes 1 day to deploy. Whatever leaks is still real.'},
+    anon:{icon:'✂️',name:'True Anonymisation',time:4,base:20,per:0.035,util:0.15,ring:'#8A86A3',desc:'Real anonymisation is expensive. Takes 4 days to deploy. Destroys utility.'},
+    remove:{icon:'🙈',name:'Name removal',time:1,base:5,per:0.005,util:0.80,ring:'#D5432E',desc:'Just removing names. Takes 1 day to deploy. False protection.'}
   };
   TEAM_TITLES=['Intern squad','Junior admins','Competent crew','Security veterans','Elite CERT'];
   XP_T=[0,60,150,280,450];
-  CUT = {icon:'⛔',name:'Cut all connections',cost:15,util:0.1,ring:'#D5432E',desc:'Sever every link to this system. Spread through it stops dead — but the business loses it almost entirely (~10% utility), and links never come back.'};
+  CUT = {icon:'⛔',name:'Cut all connections',time:1,cost:15,util:0.1,ring:'#D5432E',desc:'Sever every link to this system. Spread through it stops dead — but the business loses it almost entirely (~10% utility), and links never come back.'};
     NODES = [
     {id:'c1',label:'Patient DB',zone:'origin',rec:480,x:0.435,y:0.36},
     {id:'c2',label:'Records Core',zone:'origin',rec:320,x:0.385,y:0.24},
@@ -261,8 +263,9 @@ export class GameEngine {
 
   _lvl(){ const x=this.sim?this.sim.xp||0:0; let l=1; for(let i=1;i<this.XP_T.length;i++) if(x>=this.XP_T[i]) l=i+1; return l; }
   _deployMax(P){ const l=this._lvl(); return P.deploys+(l>=3?1:0)+(l>=5?1:0); }
+  _active(){ return this.sim.nodes.filter(n=>n.deployDays>0).length; }
   _xp(n){ const s=this.sim; const before=this._lvl(); s.xp+=n; const after=this._lvl();
-    if(after>before) this._pushLog('🎉 Team level up — '+this.TEAM_TITLES[after-1]+'!'+((after===3||after===5)?' (+1 deploy/day)':' Deploy costs drop.'), '#5FD3A6'); }
+    if(after>before) this._pushLog('🎉 Team level up — '+this.TEAM_TITLES[after-1]+'!'+((after===3||after===5)?' (+1 concurrent capacity)':' Deploy costs drop.'), '#5FD3A6'); }
   doTrain(){ const s=this.sim; if(!s.running) return;
     if(s.day<s.trainReadyDay){ this._pushLog('The team is already in training ('+(s.trainReadyDay-s.day)+'d).', '#8A86A3'); this.forceUpdate(); return; }
     if(s.budget<12){ this._pushLog('Not enough budget for a training week (€12k).', '#8A86A3'); this.forceUpdate(); return; }
@@ -324,8 +327,10 @@ export class GameEngine {
   _payloadFrom(src){
     if(!src) return 'real';
     if(src.prot==='pseudo') return 'token';
+    if(src.prot==='synth') return 'synth';
     if(src.prot==='enc') return 'blob';
     if(src.prot==='anon') return 'empty';
+    if(src.prot==='remove') return 'real';
     return src.payload || 'real';
   }
   _infect(m, src){
@@ -346,7 +351,22 @@ export class GameEngine {
   _dayTick(){
     const s=this.sim, P=this.PROFILES[s.profile];
     s.day++;
-    s.deploysLeft=this._deployMax(P);
+    // process active deployments
+    for(const n of s.nodes) {
+      if(n.deployDays > 0) {
+        n.deployDays--;
+        if(n.deployDays <= 0) {
+          if(n.deployProt === 'cut') {
+            n.cut = true;
+            this._pushLog(n.label + ' connections successfully severed.', '#D5432E');
+          } else {
+            n.prot = n.deployProt;
+            this._pushLog(this.TOOLS[n.deployProt].name + ' is now active on ' + n.label + '.', this.TOOLS[n.deployProt].ring);
+          }
+          n.deployProt = null;
+        }
+      }
+    }
     // income scales with utility; breached systems bleed money daily
     const util=this._utility();
     let bc=0;
@@ -444,21 +464,34 @@ export class GameEngine {
 
   // ---- player actions ----
   _cost(tool, n){ const t=this.TOOLS[tool]; return Math.max(1, Math.round((t.base + n.rec*t.per)*(1-0.04*(this._lvl()-1)))); }
-  closeSel(){ this.sim.selNode=null; this.forceUpdate(); }
+  closeSel(){ 
+    this.sim.selNode=null; 
+    if (this._selPrevSpeed !== undefined && this._selPrevSpeed !== null) {
+      this.setSpeed(this._selPrevSpeed);
+      this._selPrevSpeed = null;
+    }
+    this.forceUpdate(); 
+  }
   applyTool(k){
     const s=this.sim, n=s.byId[s.selNode]; if(!n) return;
-    if(s.deploysLeft<=0){ this._pushLog('IT capacity exhausted for today — capacity resets each morning.', '#8A86A3'); this.forceUpdate(); return; }
+    if(this._active() >= this._deployMax(this.PROFILES[s.profile])){ this._pushLog('IT team is at maximum deployment capacity.', '#8A86A3'); this.forceUpdate(); return; }
     const cost=this._cost(k, n);
     if(s.budget<cost){ this._pushLog('Not enough budget for '+this.TOOLS[k].name+' on '+n.label+' (€'+cost+'k).', '#8A86A3'); this.forceUpdate(); return; }
-    s.budget-=cost; s.deploysLeft--; s.spent[k]+=cost; n.prot=k; s.selNode=null; this._xp(10);
-    this._pushLog(this.TOOLS[k].name+' deployed on '+n.label+' (−€'+cost+'k).'+(n.state==='exposed'?' Existing stolen copies are NOT recalled.':''), this.TOOLS[k].ring);
-    this.forceUpdate();
+    s.budget-=cost; s.spent[k]+=cost; n.deployProt=k; n.deployDays=this.TOOLS[k].time; n.deployTotal=this.TOOLS[k].time; this._xp(10);
+    this._pushLog('Started deploying '+this.TOOLS[k].name+' on '+n.label+' (−€'+cost+'k, takes '+n.deployDays+' days).', this.TOOLS[k].ring);
+    
+    if (['pseudo','synth','anon','remove'].includes(k) && !s.lessonsSeen[k]) {
+      s.lessonsSeen[k] = true;
+      s.lesson = this.LESSONS[k];
+    }
+    this.closeSel();
   }
   doCut(){
     const s=this.sim, n=s.byId[s.selNode]; if(!n||n.cut) return;
-    if(s.deploysLeft<=0){ this._pushLog('IT capacity exhausted for today.', '#8A86A3'); this.forceUpdate(); return; }
+    if(this._active() >= this._deployMax(this.PROFILES[s.profile])){ this._pushLog('IT team is at maximum deployment capacity.', '#8A86A3'); this.forceUpdate(); return; }
     if(s.budget<this.CUT.cost){ this._pushLog('Not enough budget to isolate '+n.label+' (€'+this.CUT.cost+'k).', '#8A86A3'); this.forceUpdate(); return; }
-    s.budget-=this.CUT.cost; s.deploysLeft--; n.cut=true; s.selNode=null; this._xp(8);
+    s.budget-=this.CUT.cost; n.deployProt='cut'; n.deployDays=this.CUT.time; n.deployTotal=this.CUT.time; this._xp(8);
+    this._pushLog('Cutting connections on '+n.label+' (−€'+this.CUT.cost+'k, takes '+n.deployDays+' day).', this.CUT.ring);
     for(const mid of n.adj){ const m=s.byId[mid]; m.adj=m.adj.filter(x=>x!==n.id); }
     n.adj=[];
     this._pushLog(n.label+' isolated — every connection cut (−€'+this.CUT.cost+'k). Spread through it stops, but the business just lost it.'+(n.state==='exposed'&&n.payload==='real'?' Copies already elsewhere keep spreading.':''), '#D5432E');
@@ -478,8 +511,16 @@ export class GameEngine {
       else this._pushLog(hit.label+' is outside your jurisdiction — nothing to deploy.', '#8A86A3');
       this.forceUpdate(); return;
     }
-    s.selNode = s.selNode===hit.id ? null : hit.id;
-    this.forceUpdate();
+    if (s.selNode === hit.id) {
+      this.closeSel();
+    } else {
+      if (!s.selNode) {
+        this._selPrevSpeed = s.speed;
+        this.setSpeed(0);
+      }
+      s.selNode = hit.id;
+      this.forceUpdate();
+    }
   }
   doWipe(){
     const s=this.sim; if(!s.running) return;
@@ -726,9 +767,17 @@ export class GameEngine {
         ctx.strokeStyle='rgba(139,134,163,.6)'; ctx.lineWidth=1.5; ctx.stroke();
       }
       if(n.prot){ ctx.beginPath(); ctx.arc(x,y,r+4.5,0,7); ctx.strokeStyle=this.TOOLS[n.prot].ring; ctx.lineWidth=2; ctx.stroke(); }
+      if(n.deployDays > 0){
+        ctx.beginPath();
+        const p = 1 - (n.deployDays / n.deployTotal);
+        ctx.arc(x,y,r+4.5, -Math.PI/2, -Math.PI/2 + p * 2*Math.PI);
+        const ring = n.deployProt==='cut' ? '#D5432E' : this.TOOLS[n.deployProt].ring;
+        ctx.strokeStyle=ring; ctx.lineWidth=3; ctx.stroke();
+        ctx.beginPath(); ctx.arc(x,y,r+4.5,0,7); ctx.strokeStyle='rgba(255,255,255,0.1)'; ctx.lineWidth=1; ctx.stroke();
+      }
       if(n.cut){ ctx.beginPath(); ctx.setLineDash([3,3]); ctx.arc(x,y,r+8,0,7); ctx.strokeStyle='#D5432E'; ctx.lineWidth=1.6; ctx.stroke(); ctx.setLineDash([]); }
       if(s.selNode===n.id){ ctx.beginPath(); ctx.arc(x,y,r+9,0,7); ctx.strokeStyle='#fff'; ctx.lineWidth=1.4; ctx.stroke(); }
-      const deployable = s.running && !n.prot && !n.cut && (n.zone==='origin'||n.zone==='eu');
+      const deployable = s.running && !n.prot && !n.cut && !(n.deployDays>0) && (n.zone==='origin'||n.zone==='eu');
       if(deployable){ ctx.beginPath(); ctx.setLineDash([4,4]); ctx.lineDashOffset=-now/60;
         ctx.arc(x,y,r+5,0,7); ctx.strokeStyle='rgba(204,174,252,.5)'; ctx.lineWidth=1.2; ctx.stroke(); ctx.setLineDash([]); }
       ctx.fillStyle='rgba(220,220,235,.72)'; ctx.font='10px "IBM Plex Mono", monospace'; ctx.textAlign='center';
@@ -757,10 +806,10 @@ export class GameEngine {
     const selOpts=[];
     if(selN){
       if(!selN.cut){
-        for(const k of ['pseudo','enc','lock','anon']){ if(k===selN.prot) continue; const t=this.TOOLS[k]; const cost=this._cost(k,selN); const ok=s.budget>=cost&&s.deploysLeft>0;
+        for(const k of ['pseudo','synth','enc','lock','anon','remove']){ if(k===selN.prot) continue; const t=this.TOOLS[k]; const cost=this._cost(k,selN); const ok=s.budget>=cost&&this._active()<this._deployMax(this.PROFILES[s.profile])&&!(selN.deployDays>0);
           selOpts.push({icon:t.icon,name:(selN.prot?'Switch to ':'')+t.name,cost:'€'+cost+'k',onClick:()=>this.applyTool(k),style:optStyle(ok,t.ring)}); }
       }
-      if(!selN.cut){ const ok=s.budget>=this.CUT.cost&&s.deploysLeft>0;
+      if(!selN.cut){ const ok=s.budget>=this.CUT.cost&&this._active()<this._deployMax(this.PROFILES[s.profile])&&!(selN.deployDays>0);
         selOpts.push({icon:this.CUT.icon,name:this.CUT.name,cost:'€'+this.CUT.cost+'k',onClick:()=>this.doCut(),style:optStyle(ok,this.CUT.ring)}); }
     }
     return {
@@ -777,17 +826,17 @@ export class GameEngine {
       hasNews:screen==='playing'&&!!s.headline, headline:s.headline||'',
       spreadLine:'Breach reached '+st.exposed+' / '+(this.sim?s.nodes.length:this.NODES.length)+' systems worldwide',
       btnPause:sel(0), btn1x:sel(1), btn2x:sel(2),
-      tools:['pseudo','enc','lock','anon'].map(toolCard).concat([{icon:this.CUT.icon,name:this.CUT.name,desc:this.CUT.desc,costLabel:'€'+this.CUT.cost+'k'}]),
+      tools:['pseudo','synth','enc','lock','anon','remove'].map(toolCard).concat([{icon:this.CUT.icon,name:this.CUT.name,desc:this.CUT.desc,costLabel:'€'+this.CUT.cost+'k'}]),
       hasSel:screen==='playing'&&!!selN,
       selLabel:selN?selN.label:'', 
       selSub:selN?(selN.rec+'k records · '+(selN.cut?'isolated':(selN.prot?('protected: '+this.TOOLS[selN.prot].name):(selN.state==='exposed'?'BREACHED — protection won\u2019t recall stolen copies':'unprotected')))):'',
       selX:Math.round(Math.max(10, Math.min(selPos[0]+16, (this._w||600)-300))),
       selY:Math.round(Math.max(10, Math.min(selPos[1]-30, (this._h||400)-240))),
       selOpts,
-      selFoot:selN?(selN.cut?'This system is fully isolated.':(selN.prot?'Switching replaces the current defence at full cost. Deploys left: '+s.deploysLeft:'Deploys left today: '+s.deploysLeft+' · details in the toolkit panel →')):'',
+      selFoot:selN?(selN.cut?'This system is fully isolated.':(selN.deployDays>0?'Deployment in progress: '+selN.deployDays+' days remaining.':(selN.prot?'Switching replaces the current defence at full cost.':''))):'',
       closeSel:()=>this.closeSel(),
-      deploysLine:'deploys today: '+s.deploysLeft+'/'+(this.sim&&s.profile?this._deployMax(P):(P.deploys||0)),
-      deployColor:s.deploysLeft>0?'#5FD3A6':'#F0857A',
+      deploysLine:'Active IT tasks: '+(this.sim&&s.profile?this._active():0)+'/'+(this.sim&&s.profile?this._deployMax(P):(P.deploys||0)),
+      deployColor:(this.sim&&s.profile&&this._active()<this._deployMax(P))?'#5FD3A6':'#F0857A',
       doWipe:()=>this.doWipe(),
       teamLvl:(()=>this._lvl())(),
       difficulty: this.state.difficulty,
@@ -799,7 +848,7 @@ export class GameEngine {
       ],
       teamTitle:this.TEAM_TITLES[this._lvl()-1],
       xpPct:(()=>{ const l=this._lvl(); if(l>=5) return 100; const x=s.xp||0; return Math.round((x-this.XP_T[l-1])/(this.XP_T[l]-this.XP_T[l-1])*100); })(),
-      teamPerks:(()=>{ const l=this._lvl(); return 'perks: −'+(4*(l-1))+'% deploy costs · insider detection '+(10+13*(l-1))+'%'+(l>=3?' · +1 deploy/day':'')+(l>=5?' · +1 more':''); })(),
+      teamPerks:(()=>{ const l=this._lvl(); return 'perks: −'+(4*(l-1))+'% deploy costs · insider detection '+(10+13*(l-1))+'%'+(l>=3?' · +1 concurrent':'')+(l>=5?' · +1 more':''); })(),
       doTrain:()=>this.doTrain(),
       trainReady:this.sim&&s.day>=(s.trainReadyDay||0),
       trainLabel:this.sim&&s.day<(s.trainReadyDay||0)?('training '+(s.trainReadyDay-s.day)+'d'):'📚 Train · €12k',
