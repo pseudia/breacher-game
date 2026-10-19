@@ -1,0 +1,92 @@
+Breached Community License
+Version 1.0
+
+Copyright (c) 2025-2026 Pseudia SRL, Esplanade Simone Veil 1, 4000 Liège, Belgium.
+All rights not expressly granted below are reserved.
+
+Project page: https://www.pseudia.eu/breached/
+Contact:      info@pseudia.eu
+
+1. Definitions
+
+   "Licensor" means Pseudia SRL.
+
+   "Software" means the source code, documentation, game content (texts,
+   scenarios, graphics, logos) and any other material made available in this
+   repository by the Licensor, as well as any modified version of it.
+
+   "You" means any individual or legal entity exercising the rights granted
+   by this License.
+
+   "Sell" or "Resell" means to make the Software, or any product or service
+   whose value derives in whole or substantial part from the Software,
+   available to a third party in exchange for a fee, payment, or other
+   compensation, including (without limitation) selling copies, charging for
+   access to it, offering it as a paid hosted service, bundling it in a paid
+   product, or sublicensing it for a fee.
+
+2. Grant of rights
+
+   Subject to the terms of this License, the Licensor grants You a worldwide,
+   royalty-free, non-exclusive, non-transferable license to:
+
+   a) use, run and play the Software, for any purpose including personal,
+      educational, training, research and internal business purposes;
+   b) study and modify the Software;
+   c) copy and redistribute the Software, modified or not, free of charge;
+   d) contribute modifications back to the Licensor's project.
+
+3. Restriction: no resale without agreement
+
+   You may not Sell or Resell the Software, in whole or in part, modified or
+   not, without a prior written agreement signed by Pseudia SRL.
+
+   To request a commercial agreement, contact info@pseudia.eu.
+
+4. Conditions
+
+   a) Every copy or substantial portion of the Software You distribute must
+      include this License file and keep all copyright, attribution and
+      "Powered by Pseudia" notices intact.
+   b) Any redistribution must be under the terms of this same License, and
+      modified versions must state clearly that they have been modified.
+   c) The names "Pseudia" and "Breached" and the related logos are trademarks
+      or brand elements of the Licensor. This License does not grant any right
+      to use them, except as needed to comply with condition (a). You may not
+      present a modified version as an official Pseudia product.
+
+5. Third-party components
+
+   Some files in this repository (for example audio files and third-party
+   libraries installed as dependencies) are owned by third parties and are
+   distributed under their own licenses. Those licenses prevail for those
+   files. See the "Third-party assets" section of README.md.
+
+6. Contributions
+
+   Contributions submitted to this project are accepted under the terms
+   described in CONTRIBUTING.md.
+
+7. Termination
+
+   Any breach of this License automatically terminates the rights granted to
+   You. Rights are reinstated if You cure the breach within 30 days of being
+   notified by the Licensor, unless the Licensor has notified You of
+   repeated breaches.
+
+8. Disclaimer of warranty and limitation of liability
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. TO THE MAXIMUM
+   EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL THE LICENSOR OR THE
+   CONTRIBUTORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY ARISING
+   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR ITS USE.
+
+   The Software is an educational simulation. It does not constitute legal,
+   security or compliance advice.
+
+9. Governing law
+
+   This License is governed by Belgian law. Any dispute shall be submitted to
+   the competent courts of Liège, Belgium.
