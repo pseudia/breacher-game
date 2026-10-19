@@ -1,33 +1,53 @@
+# Breached
 
-# React + TypeScript + Vite
+**Breached** is a data pandemic simulation game by [Pseudia](https://www.pseudia.eu).
+Instead of reading long articles, you experience first-hand the real-world risks
+of data exposure, how different mitigation strategies work in practice, and how
+quickly inaction or poor technical choices can spiral out of control.
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+- About the game: <https://www.pseudia.eu/breached/>
+- Play online: <https://breached-game.s3.fr-par.scw.cloud/index.html>
 
-Currently, two official plugins are available:
+## Getting started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Requirements: Node.js 20+ and npm.
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev      # start the dev server
+npm run build    # type-check and build into dist/
+npm run preview  # preview the production build
+npm run lint     # run oxlint
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Built with React, TypeScript, Vite and Tailwind CSS.
+
+## Contributing
+
+Suggestions and improvements are welcome! Read [CONTRIBUTING.md](CONTRIBUTING.md)
+before opening an issue or a pull request. Security issues: see
+[SECURITY.md](SECURITY.md).
+
+## License
+
+Breached is distributed under the [Breached Community License](LICENSE).
+
+In short: anyone may use, play, study, modify, share and contribute to the game
+free of charge, but **nobody may sell or resell it** (in whole or in part,
+modified or not, including as a paid service) **without a prior written
+agreement from Pseudia SRL**. Contact <info@pseudia.eu> for commercial
+agreements. The "Pseudia" and "Breached" names and logos are not licensed for
+other uses. See [LICENSE](LICENSE) for the full terms.
+
+## Third-party assets
+
+These files are not covered by the Breached Community License and remain
+subject to their own license:
+
+| File | Author | Source / License |
+| --- | --- | --- |
+| `public/arctsound-ambient-suspense-atmosphere-117563.mp3` | [arctsound](https://pixabay.com/users/arctsound-27113883/) | Pixabay, [Pixabay Content License](https://pixabay.com/service/license-summary/) |
+
+npm dependencies are distributed under their respective licenses.
+
+© 2025-2026 Pseudia SRL – Liège, Belgium.

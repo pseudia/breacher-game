@@ -1,7 +1,15 @@
 {
-  "name": "temp-app",
+  "name": "breached",
   "private": true,
   "version": "0.0.0",
+  "description": "Breached: a data pandemic simulation game by Pseudia",
+  "homepage": "https://www.pseudia.eu/breached/",
+  "author": "Pseudia SRL <info@pseudia.eu> (https://www.pseudia.eu)",
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pseudia/breacher-game.git"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",

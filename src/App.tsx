@@ -48,7 +48,17 @@ const GameIcon = ({ icon, className }: { icon: string, className?: string }) => 
 
 export default function App() {
   const engineRef = useRef<GameEngine | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [gameState, setGameState] = useState<any>({});
+  const [volume, setVolume] = useState(0.5);
+  const [isMuted, setMuted] = useState(false);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+      audioRef.current.muted = isMuted;
+    }
+  }, [volume, isMuted]);
 
   useEffect(() => {
     const engine = new GameEngine();
@@ -65,6 +75,19 @@ export default function App() {
       engine.unmount();
     };
   }, []);
+
+  useEffect(() => {
+    const engine = engineRef.current;
+    if (!engine) return;
+    const o = (engine as any).renderVals ? (engine as any).renderVals() : {};
+    if (audioRef.current) {
+      if (o.isPlaying && audioRef.current.paused) {
+        audioRef.current.play().catch(e => console.log('Audio autoplay blocked', e));
+      } else if (!o.isPlaying && !audioRef.current.paused) {
+        audioRef.current.pause();
+      }
+    }
+  }, [gameState]);
 
   if (!engineRef.current || !gameState) return null;
 
@@ -94,6 +117,7 @@ export default function App() {
   const closeHelp = () => o.closeHelp && o.closeHelp();
 
   return (<><div style={_style(`position:relative;min-height:100vh;width:100%;background:radial-gradient(1200px 700px at 70% -10%, #251747 0%, #0D0C16 55%);color:var(--neutral-100);font-family:var(--font-body);overflow:hidden;display:flex;flex-direction:column`)}>
+    <audio ref={audioRef} src="/arctsound-ambient-suspense-atmosphere-117563.mp3" loop />
     <div style={_style(`position:absolute;inset:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zM40 40.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zM0 40.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z' fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");z-index:0`)}></div>
 
   <header style={_style(`display:flex;align-items:center;gap:16px;padding:14px 22px;border-bottom:1px solid rgba(255,255,255,.07);flex-wrap:wrap`)}>
@@ -117,6 +141,14 @@ export default function App() {
         <button onClick={setPause } style={_style(btnPause )}>❚❚</button>
         <button onClick={set1x } style={_style(btn1x )}>1×</button>
         <button onClick={set2x } style={_style(btn2x )}>2×</button>
+      </div>
+      <div style={_style(`display:flex;align-items:center;gap:8px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);font-size:12px;color:var(--neutral-400)`)}>
+        <button onClick={() => setMuted(!isMuted)} style={_style(`background:none;border:none;color:var(--neutral-200);cursor:pointer;padding:0;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center`)} title={isMuted ? "Unmute" : "Mute"}>
+          {isMuted || volume === 0 ? '🔇' : (volume < 0.5 ? '🔉' : '🔊')}
+        </button>
+        <input type="range" min="0" max="1" step="0.01" value={isMuted ? 0 : volume} onChange={(e) => { const v = parseFloat(e.target.value); setVolume(v); if(v > 0 && isMuted) setMuted(false); }} style={_style(`width:60px;cursor:pointer;accent-color:#CCAEFC`)} />
+        <div style={_style(`width:1px;height:14px;background:rgba(255,255,255,.1)`)}></div>
+        <div><a href="https://pixabay.com/users/arctsound-27113883/" target="_blank" rel="noreferrer" style={_style(`color:#CCAEFC;text-decoration:none;font-weight:600`)}>arctsound</a></div>
       </div>
       <button onClick={openHelp } style={_style(`padding:6px 12px;border-radius:8px;font-family:var(--font-mono);font-size:13px;cursor:pointer;border:1px solid rgba(231,177,92,.5);background:rgba(231,177,92,.1);color:#E7B15C`)} title="How to play">? Help</button>
     </div>
@@ -353,6 +385,7 @@ export default function App() {
     </div>
   </div>
   </>)}
+
 </div>
 </>);
 }
